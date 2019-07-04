@@ -7,6 +7,7 @@ local band, bor, lshift, rshift = bit.band, bit.bor, bit.lshift, bit.rshift
 --Localize some of the Lua std function for optimization reasons.
 local byte, char = string.byte, string.char
 
+--The utilies module table
 local utils = {}
 
 ---------------------
