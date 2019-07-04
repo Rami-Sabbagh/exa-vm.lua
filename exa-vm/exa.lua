@@ -6,23 +6,35 @@ local utils = require(root_module..".utilities")
 
 local exa = class('exa-vm.Exa')
 
-function exa:initialize()
-	self.name = "XA" --EXA name
-	self.source = "" --EXA raw code
+--Create a new EXA instance
+--Data could be a io file in wb mode, seeked into the EXA data "lead-in", in EXAPUNKS .solution format.
+--And could be a table with a subset (or all) EXA object fields.
+function exa:initialize(data)
+	if type(data) == "userdata" then --Load from .solution file
 
-	self.editor_view_mode = 0 --EXA editor windows view mode.
-	--[0]: Maximized, all code and registers are visible (Default).
-	--[1]: Minimized, no visible code or registers.
-	--[2]: Follow current instruction.
-	--Not much use for a VM, but good for custom editors.
+		self.sprite = {}
+		self:decode(data)
 
-	self.m_register_mode = 0 --EXA M register mode.
-	--[0]: Global (Default).
-	--[1]: Local.
+	else --Initialize a new EXA
 
-	self.sprite = {} --EXA Sprite data, an array of 100 booleans, from top-left into bottom-right, row by row.
-	--Initialize the sprite array with empty data.
-	for i=1, 100 do self.sprite[i] = false end
+		self.name = "XA" --EXA name
+		self.source = "" --EXA raw code
+
+		self.editor_view_mode = 0 --EXA editor windows view mode.
+		--[0]: Maximized, all code and registers are visible (Default).
+		--[1]: Minimized, no visible code or registers.
+		--[2]: Follow current instruction.
+		--Not much use for a VM, but good for custom editors.
+
+		self.m_register_mode = 0 --EXA M register mode.
+		--[0]: Global (Default).
+		--[1]: Local.
+
+		self.sprite = {} --EXA Sprite data, an array of 100 booleans, from top-left into bottom-right, row by row.
+		--Initialize the sprite array with empty data.
+		for i=1, 100 do self.sprite[i] = false end
+		
+	end
 end
 
 --Decode the EXA data from an EXAPUNKS .solution save file.
