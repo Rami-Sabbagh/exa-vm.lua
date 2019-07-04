@@ -11,12 +11,9 @@ local exa = class('exa-vm.Exa')
 --And could be a table with a subset (or all) EXA object fields.
 function exa:initialize(data)
 	if type(data) == "userdata" then --Load from .solution file
-
 		self.sprite = {}
 		self:decode(data)
-
 	else --Initialize a new EXA
-
 		self.name = "XA" --EXA name
 		self.source = "" --EXA raw code
 
@@ -33,7 +30,6 @@ function exa:initialize(data)
 		self.sprite = {} --EXA Sprite data, an array of 100 booleans, from top-left into bottom-right, row by row.
 		--Initialize the sprite array with empty data.
 		for i=1, 100 do self.sprite[i] = false end
-		
 	end
 end
 
