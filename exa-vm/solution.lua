@@ -62,7 +62,7 @@ function solution:decode(file)
 	local starting_exas_count = utils.readInt32(file)
 	self.starting_exas = {}
 	for i=1, starting_exas_count do
-		--TODO: Implement starting EXAs decoding.
+		self.starting_exas[i] = EXA(file)
 	end
 end
 
@@ -81,7 +81,7 @@ function solution:encode(file)
 	end
 	utils.writeInt32(file,#self.starting_exas)
 	for i=1, #self.starting_exas do
-		--TODO: Implement starting EXAs encoding.
+		self.starting_exas[i]:encode(file)
 	end
 end
 
