@@ -1,1 +1,3 @@
 -- An EXA virtual machine implementation written in Lua.
+local root_module = ...
+require(root_module..".solution")
