@@ -30,6 +30,8 @@ function exa:initialize(data)
 		self.sprite = {} --EXA Sprite data, an array of 100 booleans, from top-left into bottom-right, row by row.
 		--Initialize the sprite array with empty data.
 		for i=1, 100 do self.sprite[i] = false end
+
+		if data then self:import(data) end
 	end
 end
 
