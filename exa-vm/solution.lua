@@ -41,7 +41,7 @@ function solution:initialize()
 end
 
 --Used for decoding and encoding .solution files.
-local win_statistics_keys = {"cycles","size","activity"}
+local win_statistics_keys = {"cycles","size","activity";cycles=0,size=1,activity=2}
 
 --Decode EXAPUNKS .solution save file.
 --file (io file instance): The save file object open in rb mode !
@@ -55,14 +55,33 @@ function solution:decode(file)
 	local win_statistics_length = utils.readInt32(file)
 	self.win_statistics = {}
 	for i=1, win_statistics_length do
-		local key = win_statistics_keys[utils.readInt32(file)]
+		local key = win_statistics_keys[utils.readInt32(file)+1]
 		self.win_statistics[key] = utils.readInt32(file)
 	end
 
 	local starting_exas_count = utils.readInt32(file)
 	self.starting_exas = {}
 	for i=1, starting_exas_count do
-		--TODO: Implement starting exas decoding.
+		--TODO: Implement starting EXAs decoding.
+	end
+end
+
+--Encode EXAPUNKS .solution save file.
+--file (io file instance): The save file object open in wb mode !
+function solution:encode(file)
+	utils.writeInt32(file,self.version)
+	utils.writeString(file,self.level_id)
+	utils.writeString(file,self.name)
+	utils.writeInt32(file,self.competition_wins)
+	utils.writeInt32(file,self.redshift_size)
+	utils.writeInt32(file,#self.win_statistics)
+	for k,v in pairs(self.win_statistics) do
+		utils.writeInt32(file,win_statistics_keys[k])
+		utils.writeInt32(file,v)
+	end
+	utils.writeInt32(file,#self.starting_exas)
+	for i=1, #self.starting_exas do
+		--TODO: Implement starting EXAs encoding.
 	end
 end
 
