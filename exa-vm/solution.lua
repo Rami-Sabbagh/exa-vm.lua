@@ -4,7 +4,7 @@
 - https://www.reddit.com/r/exapunks/comments/973luq/current_solution_file_format/
 ]]
 
-local root_module = ...
+local root_module = string.sub(...,1,-1-string.len("solution"))
 
 --Require some libraries
 local class = require(root_module..".middleclass")
