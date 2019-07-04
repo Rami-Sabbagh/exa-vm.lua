@@ -33,6 +33,47 @@ function exa:initialize(data)
 	end
 end
 
+----------------------------------------
+--- Savedata Exporters and Importers ---
+----------------------------------------
+
+local savedata_fields = {"name","source","editor_view_mode","m_register_mode"} --sprite is not included !
+
+--Import the save-able fields or a subset of them from a table.
+function exa:import(savedata)
+	for i=1, #savedata_fields do
+		local field = savedata_fields[i]
+		self[field] = savedata[field] or self[field]
+	end
+
+	if savedata.sprite then
+		for i=1, 100 do
+			self.sprite[i] = savedata.sprite[i]
+		end
+	end
+end
+
+--Export the save-able fields into a table.
+function exa:export()
+	local savedata = {}
+
+	for i=1, #savedata_fields do
+		local field = savedata_fields[i]
+		savedata[field] = self[field]
+	end
+
+	savedata.sprite = {}
+	for i=1, 100 do
+		savedata.sprite[i] = self.sprite[i]
+	end
+
+	return savedata
+end
+
+---------------------------------------
+--- .Solution Encoders and Decoders ---
+---------------------------------------
+
 --Decode the EXA data from an EXAPUNKS .solution save file.
 --The file should be seeked into the EXA "lead-in".
 --file (io file instance): The save file object open in rb mode !
