@@ -40,6 +40,60 @@ function solution:initialize()
 	--Move instances could be created during execution using the REPL instruction.
 end
 
+----------------------------------------
+--- Savedata Exporters and Importers ---
+----------------------------------------
+
+local savedata_fields = {"version","level_id","name","competition_wins","redshift_size"} 
+--win_statistics and starting_exas are not included !
+
+--Import the save-able fields or a subset of them from a table.
+function solution:import(savedata)
+	for i=1, #savedata_fields do
+		local field = savedata_fields[i]
+		self[field] = savedata[field] or self[field]
+	end
+
+	if savedata.win_statistics then
+		for k,v in pairs(self.win_statistics) do
+			self.competition_wins[k] = savedata.win_statistics[k]
+		end
+	end
+
+	if savedata.starting_exas then
+		self.starting_exas = {}
+		for i=1, #savedata.starting_exas do
+			self.starting_exas[i] = EXA(savedata.starting_exas[i])
+		end
+	end
+end
+
+--Export the save-able fields into a table.
+function solution:export()
+	local savedata = {}
+
+	for i=1, #savedata_fields do
+		local field = savedata_fields[i]
+		savedata[field] = self[field]
+	end
+
+	savedata.win_statistics = {}
+	for k,v in pairs(self.win_statistics) do
+		savedata.win_statistics[k] = v
+	end
+
+	savedata.starting_exas = {}
+	for i=1, #self.starting_exas do
+		savedata.starting_exas[i] = self.starting_exas[i]:export()
+	end
+
+	return savedata
+end
+
+---------------------------------------
+--- .Solution Encoders and Decoders ---
+---------------------------------------
+
 --Used for decoding and encoding .solution files.
 local win_statistics_keys = {"cycles","size","activity";cycles=0,size=1,activity=2}
 
